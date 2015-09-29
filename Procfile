@@ -1,0 +1,1 @@
+web: gunicorn becom_backend.wsgi --log-file -
