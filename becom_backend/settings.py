@@ -70,17 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'becom_backend.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -90,6 +79,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+
+DATABASES = {}
 
 # Parse database configuration from $DATABASE_URL
 DATABASES['default'] = dj_database_url.config()
