@@ -1,44 +1,44 @@
 Database specification
 
---- User Table ---
-* id_usuar
-* email
-* name
-* password (encrypted)
-* age
-* gender
-* facebook_token
+	--- User Table ---
+	* id_usuar
+	* email
+	* name
+	* password (encrypted)
+	* age
+	* gender
+	* facebook_token
 
---- BeCom Table ---
-* id_becom
-* id_user (FK) -> Usuar
-* position
-* creation date
-* reach
-* force
-* id_text (FK) -> 
-* id_photo (FK) ->
-* id_video (FK) ->
+	--- BeCom Table ---
+	* id_becom
+	* id_user (FK) -> User
+	* position
+	* creation date
+	* expiration_timestamp -> uses to calculate reach and ttl
+	* maximum_reach
+	* id_text (FK) -> 
+	* id_photo (FK) ->
+	* id_video (FK) ->
 
---- Commentary Table ---
-* id_comment
-* id_beacon (FK) -> Beacon
-* text (limit 140 char)
+	--- Commentary Table ---
+	* id_comment
+	* id_beacon (FK) -> Beacon
+	* text (limit 140 char)
 
---- Text table ---
-* id_text
-* text
+	--- Text table ---
+	* id_text
+	* text
 
---- Photo table ---
-* id_photo
-* file
+	--- Photo table ---
+	* id_photo
+	* file
 
---- Video table ---
-* id_video
-* file
+	--- Video table ---
+	* id_video
+	* file
 
---- Event Log ---
-* id_event
-* event_type
-* creation_date
-* user_responsible
+	--- Event Log ---
+	* id_event
+	* event_type
+	* creation_date
+	* user_responsible
