@@ -1,0 +1,16 @@
+How does reach and time to live work:
+
+1. At the database, we store the expiration time for a beacon
+
+2. At regular periods of time, a scheduled procedure updates the
+maximum reach of all beacons
+
+3. Whenever a beacon is "liked", it's maximum reach and expiration time
+is updated
+
+The real reach and time to live of each beacon is shown and calculated
+client-side using
+
+For selecting which beacons we have to initially send to someone, we use 
+the maximum reach that each beacon has. Then we verify if the beacon's actual
+reach puts it at the person's reach.
