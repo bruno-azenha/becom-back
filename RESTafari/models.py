@@ -2,17 +2,17 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Text(models.Models):
+class Text(models.Model):
 	text = models.TextField()
 
-class Picture(models.Models):
+class Picture(models.Model):
 	picture = models.ImageField(upload_to="user_pic")
 
-class Video(models.Models):
+class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
 
 
-class Beacom(models.Models):
+class Beacom(models.Model):
 	user            = models.ForeignKey(User)
 	position        = models.PointField()
 	creation_date   = models.DateTimeField(auto_now_add=True)
