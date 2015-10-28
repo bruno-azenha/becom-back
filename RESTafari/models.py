@@ -2,13 +2,13 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Text(models.Models)
+class Text(models.Models):
 	text = models.TextField()
 
-class Picture(models.Models)
+class Picture(models.Models):
 	picture = models.ImageField(upload_to="user_pic")
 
-class Video(models.Models)
+class Video(models.Models):
 	video = models.FileField(upload_to="user_vid")
 
 
