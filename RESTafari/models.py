@@ -6,7 +6,7 @@ class Text(models.Model):
 	text = models.TextField()
 
 class Picture(models.Model):
-	picture = models.ImageField(upload_to="user_pic")
+	picture = models.FileField(upload_to="user_pic")
 
 class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
