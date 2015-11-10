@@ -14,8 +14,8 @@ class Video(models.Model):
 class User(models.Model):
 	email  = models.EmailField()
 	name   = models.CharField(100)
-	age    = models.IntField(null=true)
-	gender = models.IntField(null=true)        
+	age    = models.IntegerField(null=true)
+	gender = models.IntegerField(null=true)        
 
 class Beacon(models.Model):
 	user            = models.ForeignKey(User)
