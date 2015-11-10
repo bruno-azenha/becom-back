@@ -1,5 +1,4 @@
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
 
 # Create your models here.
 class Text(models.Model):
@@ -12,6 +11,12 @@ class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
 
 
+class User(models.Model):
+	email  = models.EmailField()
+	name   = models.CharField(100)
+	age    = models.IntField(null=true)
+	gender = models.IntField(null=true)        
+
 class Beacom(models.Model):
 	user            = models.ForeignKey(User)
 	position        = models.PointField()
@@ -21,5 +26,9 @@ class Beacom(models.Model):
 	id_text         = models.ForeignKey(Text, null=True)
 	id_picture      = models.ForeignKey(Picture, null=True)
 	id_video        = models.ForeignKey(Video, null=True)
+
+class Comment(models.Model):
+	beacon = models.ForeignKey(Beacom)
+	text   = models.ForeignKey(Text)
 
     
