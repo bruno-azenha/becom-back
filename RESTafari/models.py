@@ -17,7 +17,7 @@ class User(models.Model):
 	age    = models.IntField(null=true)
 	gender = models.IntField(null=true)        
 
-class Beacom(models.Model):
+class Beacon(models.Model):
 	user            = models.ForeignKey(User)
 	position        = models.PointField()
 	creation_date   = models.DateTimeField(auto_now_add=True)
@@ -28,7 +28,7 @@ class Beacom(models.Model):
 	id_video        = models.ForeignKey(Video, null=True)
 
 class Comment(models.Model):
-	beacon = models.ForeignKey(Beacom)
+	beacon = models.ForeignKey(Beacon)
 	text   = models.ForeignKey(Text)
 
     
