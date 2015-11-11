@@ -9,11 +9,9 @@ router.register(r'beacons', views.BeaconViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    #url(r'^', include(router.urls)),
+    url(r'^browsable_api', include(router.urls)),
 
     url(r'^beacons/$', views.GetNearBeacons),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
-
 ]

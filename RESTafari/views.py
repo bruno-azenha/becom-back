@@ -1,10 +1,11 @@
-from django.http import JsonResponse
-from RESTafari.models import *
-from RESTafari.models import Beacon
-from RESTafari.serializers import UserSerializer, BeaconSerializer
-
+from django.core.serializers import serialize
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
+from django.http import HttpResponse
+
+from RESTafari.models import *
+
+from RESTafari.serializers import UserSerializer, BeaconSerializer
 
 from rest_framework import viewsets
 
@@ -23,14 +24,21 @@ class BeaconViewSet(viewsets.ModelViewSet):
     queryset = Beacon.objects.all()
     serializer_class = BeaconSerializer
 
+
 def GetNearBeacons(request):
+	# Gets latitude and longitude from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
 
+	# Sets query distance to dist or 100m if dist is not set
+	dist = request.GET.get('dist') if request.GET.get('dist') == '' else 100
+
+	# Creates a point from to calculate distances from
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
-	#query = Beacon.objects.filter(position__distance_lte=(point, D(m=20)))
-
-	response = JsonResponse([1,2], safe=False)
-	print(response)
+	# Gets all beacons within dist from point
+	query = Beacon.objects.filter(position__distance_lte=(point, 200, 'spheroid'))
+	
+	# Serializes query and returns response
+	response = HttpResponse(serialize('geojson', query), content_type="application/json")
 	return (response)

@@ -19,13 +19,14 @@ class User(models.Model):
 
 class Beacon(models.Model):
 	user            = models.ForeignKey(User)
-	position        = models.PointField()
+	position        = models.PointField(geography=True) # srid defaults to 4326
 	creation_date   = models.DateTimeField(auto_now_add=True)
 	expiration_date = models.DateTimeField()
 	reach           = models.FloatField(default=20.0)
 	id_text         = models.ForeignKey(Text, null=True)
 	id_picture      = models.ForeignKey(Picture, null=True)
 	id_video        = models.ForeignKey(Video, null=True)
+	objects 		= models.GeoManager() # Needed for geographic filtering
 
 class Comment(models.Model):
 	beacon = models.ForeignKey(Beacon)
