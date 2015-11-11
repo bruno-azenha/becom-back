@@ -10,7 +10,6 @@ class Picture(models.Model):
 class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
 
-
 class User(models.Model):
 	fb_uid   = models.CharField(max_length=16, db_index=True, unique=True) #Facebook User ID
 	fb_token = models.CharField(max_length=64)
