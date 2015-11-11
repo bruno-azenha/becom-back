@@ -26,19 +26,21 @@ class BeaconViewSet(viewsets.ModelViewSet):
 
 
 def GetNearBeacons(request):
-	# Gets latitude and longitude from http request
+	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
+	dist = request.GET.get('dist')
 
 	# Sets query distance to dist or 100m if dist is not set
-	dist = request.GET.get('dist') if request.GET.get('dist') == '' else 100
-
+	dist = 100 if dist == '' else int(dist)
+	print ("Dist is: {}".format(dist))
 	# Creates a point from to calculate distances from
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
 	# Gets all beacons within dist from point
-	query = Beacon.objects.filter(position__distance_lte=(point, dist, 'spheroid'))
-	
+	print (D(m=dist))
+	query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
+	print (query)
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
 	return (response)
