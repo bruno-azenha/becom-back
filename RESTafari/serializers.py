@@ -4,7 +4,7 @@ from RESTafari.models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'name', 'age', 'gender', 'fb_uid', 'fb_token')
+        fields = ('id', 'fb_uid', 'email')
 
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
@@ -14,19 +14,19 @@ class BeaconSerializer(serializers.HyperlinkedModelSerializer):
 class TextSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Text
-		fields = ('text',)
+		fields = ('id', 'text',)
 
 class PictureSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Picture
-		fields = ('picture',)
+		fields = ('id', 'picture',)
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Video
-		fields = ('video',)
+		fields = ('id', 'video',)
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Comment
-		fields = ('beacon', 'text')
+		fields = ('id', 'beacon', 'text')
