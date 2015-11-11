@@ -6,26 +6,42 @@ from django.http import HttpResponse
 
 from RESTafari.models import *
 
-from RESTafari.serializers import UserSerializer, BeaconSerializer
+from RESTafari.serializers import *
 
 from rest_framework import viewsets
 
+# API endpoint that allows users to be viewed or edited.
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 
+# API endpoint that allows beacons to be viewed or edited.
+class BeaconViewSet(viewsets.ModelViewSet): 
+	queryset = Beacon.objects.all()
+	serializer_class = BeaconSerializer
 
-class BeaconViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows beacons to be viewed or edited.
-    """
-    queryset = Beacon.objects.all()
-    serializer_class = BeaconSerializer
+# API endpoint that allows texts to be viewed or edited.
+class TextViewSet(viewsets.ModelViewSet):
+	queryset = Text.objects.all()
+	serializer_class = TextSerializer
 
+# API endpoint that allows pictures to be viewed or edited.
+class PictureViewSet(viewsets.ModelViewSet):
+	queryset = Picture.objects.all()
+	serializer_class = PictureSerializer
 
+# API endpoint that allows videos to be viewed or edited.
+class VideoViewSet(viewsets.ModelViewSet):
+	queryset = Video.objects.all()
+	serializer_class = VideoSerializer
+
+# API endpoint that allows comments to be viewed or edited.
+class CommentViewSet(viewsets.ModelViewSet):
+	queryset = Comment.objects.all()
+	serializer_class = CommentSerializer
+
+# API endpoint that returns all beacons that are on reach of a certain
+# coordinate (lat, lng)
 def GetNearBeacons(request):
 	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')

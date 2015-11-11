@@ -15,7 +15,7 @@ class User(models.Model):
 	email  = models.EmailField()
 	name   = models.CharField(max_length=100)
 	age    = models.IntegerField(null=True)
-	gender = models.IntegerField(null=True)        
+	gender = models.IntegerField(null=True)
 
 class Beacon(models.Model):
 	user            = models.ForeignKey(User)
