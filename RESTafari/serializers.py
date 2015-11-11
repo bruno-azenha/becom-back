@@ -9,7 +9,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Beacon
-		fields = ('user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'id_picture', 'id_video')
+		fields = ('id', 'user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'id_picture', 'id_video')
 
 class TextSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:

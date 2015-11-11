@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^browsable_api/', include(router.urls)),
 
     url(r'^beacons/$', views.GetNearBeacons),
+    url(r'^beacon/$', views.GetBeacon),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

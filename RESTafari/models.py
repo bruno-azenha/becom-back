@@ -10,7 +10,6 @@ class Picture(models.Model):
 class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
 
-
 class User(models.Model):
 	email  = models.EmailField()
 	name   = models.CharField(max_length=100)

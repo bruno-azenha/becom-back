@@ -3,6 +3,7 @@ from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
 from django.db.models import F # For referencing fields in the same model
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 from RESTafari.models import *
 
@@ -57,3 +58,33 @@ def GetNearBeacons(request):
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
 	return (response)
+
+# API endpoint that given an Beacon ID, returns the beacon and
+# all information associated with it
+def GetBeacon(request):
+	print("Got into GetTBeacon view")
+	# Get id from http request
+	beacon_id = int(request.GET.get('id'))
+
+	# Select correct beacon
+	beacon = Beacon.objects.get(id=beacon_id)
+
+	# Retrieves ids for text, picture and video if exist
+	text = beacon.id_text.text if beacon.id_text != None else None
+	#picture = beacon.id_picture.picture if beacon.id_picture != None else None
+	#video = beacon.id_video.video if beacon.id_video != None else None
+
+	#print("textID:{0}  pictureID:{1}  videoID:{2}".format(textId.text, pictureId, videoId))
+
+	# Merge text, picture and video in a single data
+	data = dict([('text', text)])#, ('picture', picture), ('video', video)])
+	
+	# Serialize data into Json and return
+	response = JsonResponse(data)
+	print(data)
+	return (response)
+
+
+
+
+
