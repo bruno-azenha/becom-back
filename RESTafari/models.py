@@ -12,10 +12,12 @@ class Video(models.Model):
 
 
 class User(models.Model):
-	email  = models.EmailField()
-	name   = models.CharField(max_length=100)
-	age    = models.IntegerField(null=True)
-	gender = models.IntegerField(null=True)        
+	fb_uid   = models.CharField(max_length=16, db_index=True, unique=True) #Facebook User ID
+	fb_token = models.CharField(max_length=64)
+	email    = models.EmailField()
+	name     = models.CharField(max_length=100)
+	age      = models.IntegerField(null=True)
+	gender   = models.IntegerField(null=True)        
 
 class Beacon(models.Model):
 	user            = models.ForeignKey(User)
