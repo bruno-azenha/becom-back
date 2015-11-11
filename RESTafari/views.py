@@ -37,7 +37,7 @@ def GetNearBeacons(request):
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
 	# Gets all beacons within dist from point
-	query = Beacon.objects.filter(position__distance_lte=(point, 200, 'spheroid'))
+	query = Beacon.objects.filter(position__distance_lte=(point, dist, 'spheroid'))
 	
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
