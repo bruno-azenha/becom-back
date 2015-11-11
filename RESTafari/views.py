@@ -1,6 +1,7 @@
 from django.core.serializers import serialize
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
+from django.db.models import F # For referencing fields in the same model
 from django.http import HttpResponse
 
 from RESTafari.models import *
@@ -29,17 +30,13 @@ def GetNearBeacons(request):
 	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
-	dist = request.GET.get('dist')
 
-	# Sets query distance to dist or 100m if dist is not set
-	dist = 100 if dist == '' else int(dist)
-	print ("Dist is: {}".format(dist))
 	# Creates a point from to calculate distances from
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
-	# Gets all beacons within dist from point
-	print (D(m=dist))
-	query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
+	# Gets all beacons within range of the point
+	query = Beacon.objects.all().extra(where=['ST_Distance(position, ST_PointFromText(%s, 4326)) <= CAST(reach AS double precision) / 1000'], params=[point.wkt] ) 
+
 	print (query)
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
