@@ -54,7 +54,6 @@ def GetNearBeacons(request):
 	# Gets all beacons within range of the point
 	query = Beacon.objects.all().extra(where=['ST_Distance(position, ST_PointFromText(%s, 4326)) <= CAST(reach AS double precision) / 1000'], params=[point.wkt] ) 
 
-	print (query)
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
 	return (response)

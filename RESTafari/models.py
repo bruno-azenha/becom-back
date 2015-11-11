@@ -15,7 +15,6 @@ class User(models.Model):
 	email	= models.EmailField()
 
 class Beacon(models.Model):
-	id 				= models.AutoField(primary_key=True)
 	user			= models.ForeignKey(User)
 	position		= models.PointField(geography=True) # srid defaults to 4326
 	creation_date	= models.DateTimeField(auto_now_add=True)
