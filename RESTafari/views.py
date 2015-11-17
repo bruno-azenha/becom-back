@@ -44,6 +44,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 # API endpoint that returns all beacons that are on reach of a certain
 # coordinate (lat, lng)
 def GetNearBeacons(request):
+	print("Got into GetNearBeacons")
+
 	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
@@ -52,7 +54,7 @@ def GetNearBeacons(request):
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
 	# Gets all beacons within range of the point
-	query = Beacon.objects.all().extra(where=['(ST_Distance(position, ST_PointFromText(%s, 4326))) <= CAST(reach AS double precision)'], params=[point.wkt] ) 
+	query = Beacon.objects.all().extra(where=['(ST_Distance(position, ST_PointFromText(%s, 4326))) <= CAST(reach AS double precision)'], params=[point.wkt]) 
 
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
@@ -61,7 +63,7 @@ def GetNearBeacons(request):
 # API endpoint that given an Beacon ID, returns the beacon and
 # all information associated with it
 def GetBeacon(request):
-	print("Got into GetTBeacon view")
+	print("Got into GetBeacon view")
 	# Get id from http request
 	beacon_id = int(request.GET.get('id'))
 
@@ -70,18 +72,40 @@ def GetBeacon(request):
 
 	# Retrieves ids for text, picture and video if exist
 	text = beacon.id_text.text if beacon.id_text != None else None
-	#picture = beacon.id_picture.picture if beacon.id_picture != None else None
-	#video = beacon.id_video.video if beacon.id_video != None else None
+	picture = beacon.id_picture.id if beacon.id_picture != None else None
+	video = beacon.id_video.id if beacon.id_video != None else None
 
 	#print("textID:{0}  pictureID:{1}  videoID:{2}".format(textId.text, pictureId, videoId))
 
-	# Merge text, picture and video in a single data
-	data = dict([('text', text)])#, ('picture', picture), ('video', video)])
+	# Encapsulate text, picture url and video url
+	data = dict([('text', text), ('picture', picture), ('video', video)])
 	
 	# Serialize data into Json and return
 	response = JsonResponse(data)
 	print(data)
 	return (response)
+
+#API endpoint that given all of its information, creates a beacon
+def CreateBeacon(request):
+	print("Got into CreateBeacon")
+
+#API endpoint that gets a Picture stored on the server
+def GetPicture(request):
+	picture_id = int(request.GET.get("id"))
+	print("Requested Picture Id + " + str(picture_id))
+
+	picture_data = Picture.objects.get(id=picture_id).picture.read()
+	return HttpResponse(picture_data, content_type="image/jpeg")
+
+#API endpoint that gets a Video stored on the server
+def GetVideo(request):
+	video_id = int(request.GET.get("id"))
+	print("Requested Video Id + " + str(video_id))
+
+	video_data = Video.objects.get(id=video_id).video.read()
+	return HttpResponse(video_data, content_type="video/mp4")
+
+
 
 
 
