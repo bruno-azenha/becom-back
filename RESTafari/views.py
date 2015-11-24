@@ -1,15 +1,15 @@
 from django.core.serializers import serialize
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
-from django.db.models import F # For referencing fields in the same model
-from django.http import HttpResponse
-from django.http import JsonResponse
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
 
 from RESTafari.models import *
-
 from RESTafari.serializers import *
 
-from rest_framework import viewsets
 
 # API endpoint that allows users to be viewed or edited.
 class UserViewSet(viewsets.ModelViewSet):
@@ -43,6 +43,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 # API endpoint that returns all beacons that are on reach of a certain
 # coordinate (lat, lng)
+@api_view()
+@permission_classes((AllowAny, ))
 def GetNearBeacons(request):
 	print("Got into GetNearBeacons")
 
@@ -65,12 +67,14 @@ def GetNearBeacons(request):
 		query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
 
 	# Serializes query and returns response
-	response = HttpResponse(serialize('geojson', query), content_type="application/json")
-	return (response)
+	
+	return (Response(serialize('geojson', query)))
 
 
 # API endpoint that given an Beacon ID, returns the beacon and
 # all information associated with it
+@api_view()
+@permission_classes((AllowAny, ))
 def GetBeacon(request):
 	print("Got into GetBeacon view")
 	# Get id from http request
@@ -89,10 +93,8 @@ def GetBeacon(request):
 	# Encapsulate text, picture url and video url
 	data = dict([('text', text), ('picture', picture), ('video', video)])
 	
-	# Serialize data into Json and return
-	response = JsonResponse(data)
-	print(data)
-	return (response)
+	# Serialize data into requested content-type and return
+	return (Response(data))
 
 #API endpoint that given all of its information, creates a beacon
 def CreateBeacon(request):
@@ -100,20 +102,24 @@ def CreateBeacon(request):
 	
 
 #API endpoint that gets a Picture stored on the server
+@api_view()
+@permission_classes((AllowAny, ))
 def GetPicture(request):
 	picture_id = int(request.GET.get("id"))
-	print("Requested Picture Id + " + str(picture_id))
+	print("Requested Picture Id = " + str(picture_id))
 
-	picture_data = Picture.objects.get(id=picture_id).picture.read()
-	return HttpResponse(picture_data, content_type="image/jpeg")
+	picture_data = Picture.objects.get(id=picture_id).picture.url
+	return Response(picture_data)
 
 #API endpoint that gets a Video stored on the server
+@api_view()
+@permission_classes((AllowAny, ))
 def GetVideo(request):
 	video_id = int(request.GET.get("id"))
-	print("Requested Video Id + " + str(video_id))
+	print("Requested Video Id = " + str(video_id))
 
-	video_data = Video.objects.get(id=video_id).video.read()
-	return HttpResponse(video_data, content_type="video/mp4")
+	video_data = Video.objects.get(id=video_id).video.url
+	return Response(video_data)
 
 
 
