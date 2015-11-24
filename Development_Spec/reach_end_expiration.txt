@@ -14,3 +14,5 @@ client-side using
 For selecting which beacons we have to initially send to someone, we use 
 the maximum reach that each beacon has. Then we verify if the beacon's actual
 reach puts it at the person's reach.
+
+4 - We may not even need the reach on the database

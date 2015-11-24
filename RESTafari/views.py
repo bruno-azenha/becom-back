@@ -49,16 +49,25 @@ def GetNearBeacons(request):
 	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
+	dist = request.GET.get('dist')
 
 	# Creates a point from to calculate distances from
 	point = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
 
-	# Gets all beacons within range of the point
-	query = Beacon.objects.all().extra(where=['(ST_Distance(position, ST_PointFromText(%s, 4326))) <= CAST(reach AS double precision)'], params=[point.wkt]) 
+	# Verifies if dist parameter was passed
+	if dist == None:
+		# Gets all beacons within range of the point
+		query = Beacon.objects.all().extra(where=['(ST_Distance(position, ST_PointFromText(%s, 4326))) <= CAST(reach AS double precision)'], params=[point.wkt]) 
+
+	else:
+		# Gets all beacon within dist distance from point
+		dist = int(dist)
+		query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
 
 	# Serializes query and returns response
 	response = HttpResponse(serialize('geojson', query), content_type="application/json")
 	return (response)
+
 
 # API endpoint that given an Beacon ID, returns the beacon and
 # all information associated with it
@@ -88,6 +97,7 @@ def GetBeacon(request):
 #API endpoint that given all of its information, creates a beacon
 def CreateBeacon(request):
 	print("Got into CreateBeacon")
+	
 
 #API endpoint that gets a Picture stored on the server
 def GetPicture(request):
