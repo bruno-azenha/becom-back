@@ -19,7 +19,9 @@ urlpatterns = [
 	url(r'^beacons/$', views.near_beacons),
 	url(r'^beacon/$', views.beacon),
 
-	url(r'^picture/$', views.get_picture),
+	url(r'^pictures/(\d+)$', views.picture),
+	url(r'^videos/(\d+)$', views.video),
+	url(r'^texts/(\d+)$', views.text),
 
 	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
