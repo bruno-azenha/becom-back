@@ -12,3 +12,4 @@ psycopg2==2.6.1
 static3==0.6.1
 whitenoise==1.0.6
 django-rest-framework-social-oauth2==1.0.2
+
