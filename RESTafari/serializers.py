@@ -32,6 +32,22 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 		fields = ('id', 'beacon', 'text')
 
 class BeaconSimpleSerializer(serializers.ModelSerializer):
+	id_text = serializers.SlugRelatedField(
+		read_only=True,
+		allow_null=True,
+		slug_field='text'
+	)
+	id_picture = serializers.SlugRelatedField(
+		read_only=True,
+		allow_null=True,
+		slug_field='url'
+	)
+	id_video = serializers.SlugRelatedField(
+		read_only=True,
+		allow_null=True,
+		slug_field='url'
+	)
+
 	class Meta:
 		model = Beacon
 		fields = ('id', 'user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'id_picture', 'id_video')
