@@ -60,3 +60,6 @@ target/
 
 # Images
 *.jpg
+
+# OS X
+.DS_Store

@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'RESTafari',
     'rest_framework',
+    'rest_framework_gis',
     'oauth2_provider',
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',

@@ -2,6 +2,9 @@ from django.core.serializers import serialize
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
 
+from django.http import HttpResponse
+from django.http import JsonResponse
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -66,9 +69,10 @@ def GetNearBeacons(request):
 		dist = int(dist)
 		query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
 
+
 	# Serializes query and returns response
-	
-	return (Response(serialize('geojson', query)))
+	#response = HttpResponse(BeaconSerializer(query, many=True).data, content_type="application/json")
+	return Response(BeaconSimpleSerializer(query, many=True).data)
 
 
 # API endpoint that given an Beacon ID, returns the beacon and
@@ -94,7 +98,7 @@ def GetBeacon(request):
 	data = dict([('text', text), ('picture', picture), ('video', video)])
 	
 	# Serialize data into requested content-type and return
-	return (Response(data))
+	return Response(data)
 
 #API endpoint that given all of its information, creates a beacon
 def CreateBeacon(request):

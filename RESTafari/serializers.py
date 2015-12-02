@@ -30,3 +30,8 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Comment
 		fields = ('id', 'beacon', 'text')
+
+class BeaconSimpleSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Beacon
+		fields = ('id', 'user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'id_picture', 'id_video')
