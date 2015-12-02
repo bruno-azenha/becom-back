@@ -16,10 +16,10 @@ router.register(r'comments', views.CommentViewSet)
 urlpatterns = [
 	url(r'^browsable_api/', include(router.urls)),
 
-	url(r'^beacons/$', views.GetNearBeacons),
-	url(r'^beacon/$', views.GetBeacon),
+	url(r'^beacons/$', views.near_beacons),
+	url(r'^beacon/$', views.beacon),
 
-	url(r'^picture/$', views.GetPicture),
+	url(r'^picture/$', views.get_picture),
 
 	url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

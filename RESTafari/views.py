@@ -48,7 +48,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 # coordinate (lat, lng)
 @api_view()
 @permission_classes((AllowAny, ))
-def GetNearBeacons(request):
+def near_beacons(request):
 	print("Got into GetNearBeacons")
 
 	# Gets latitude, longitude and distance from http request
@@ -79,7 +79,7 @@ def GetNearBeacons(request):
 # all information associated with it
 @api_view()
 @permission_classes((AllowAny, ))
-def GetBeacon(request):
+def beacon(request):
 	print("Got into GetBeacon view")
 	# Get id from http request
 	beacon_id = int(request.GET.get('id'))
@@ -101,14 +101,14 @@ def GetBeacon(request):
 	return Response(data)
 
 #API endpoint that given all of its information, creates a beacon
-def CreateBeacon(request):
+def create_beacon(request):
 	print("Got into CreateBeacon")
 	
 
 #API endpoint that gets a Picture stored on the server
 @api_view()
 @permission_classes((AllowAny, ))
-def GetPicture(request):
+def get_picture(request):
 	picture_id = int(request.GET.get("id"))
 	print("Requested Picture Id = " + str(picture_id))
 
@@ -118,7 +118,7 @@ def GetPicture(request):
 #API endpoint that gets a Video stored on the server
 @api_view()
 @permission_classes((AllowAny, ))
-def GetVideo(request):
+def get_video(request):
 	video_id = int(request.GET.get("id"))
 	print("Requested Video Id = " + str(video_id))
 
