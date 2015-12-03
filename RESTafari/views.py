@@ -7,12 +7,14 @@ from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 
 from RESTafari.models import *
 from RESTafari.serializers import *
 
+import json
+import datetime
 
 # API endpoint that allows users to be viewed or edited.
 class UserViewSet(viewsets.ModelViewSet):
@@ -79,29 +81,63 @@ def near_beacons(request):
 @api_view()
 @permission_classes((AllowAny, ))
 def beacon(request):
+	if request.method == 'GET':
 
-	# Get id from http request
-	beacon_id = int(request.GET.get('id'))
+		# Get id from http request
+		beacon_id = int(request.GET.get('id'))
 
-	# Select correct beacon
-	beacon = Beacon.objects.get(id=beacon_id)
+		# Select correct beacon
+		beacon = Beacon.objects.get(id=beacon_id)
 
-	# Retrieves ids for text, picture and video if exist
-	text = beacon.id_text.text if beacon.id_text != None else None
-	picture = beacon.id_picture.id if beacon.id_picture != None else None
-	video = beacon.id_video.id if beacon.id_video != None else None
+		# Retrieves ids for text, picture and video if exist
+		text = beacon.id_text.text if beacon.id_text != None else None
+		picture = beacon.id_picture.id if beacon.id_picture != None else None
+		video = beacon.id_video.id if beacon.id_video != None else None
 
-	#print("textID:{0}  pictureID:{1}  videoID:{2}".format(textId.text, pictureId, videoId))
+		#print("textID:{0}  pictureID:{1}  videoID:{2}".format(textId.text, pictureId, videoId))
 
-	# Encapsulate text, picture url and video url
-	data = dict([('text', text), ('picture', picture), ('video', video)])
-	
-	# Serialize data into requested content-type and return
-	return Response(data)
+		# Encapsulate text, picture url and video url
+		data = dict([('text', text), ('picture', picture), ('video', video)])
+		
+		# Serialize data into requested content-type and return
+		return Response(data)
+
 
 #API endpoint that given all of its information, creates a beacon
+@api_view()
+@permission_classes((AllowAny, ))
 def create_beacon(request):
-	pass
+	if request.method == 'POST':
+		received_json = json.loads(request.body)
+
+		beacon = Beacon()
+		beacon.user = received_json['user']
+		beacon.position = received_json['position']
+		beacon.expiration_date = received_json['expiration_date']
+		beacon.creation_date = datetime.datetime.now()
+
+		if (received_json[text]):
+			text = Text(text=received_json['text'])
+			text.save()
+			beacon.text = text
+
+		if (request.FILES['picture']):
+			picture = Picture(picture=request.FILES['picture'])
+			picture.save()
+			beacon.picture = picture
+
+		if (request.FILES['video']):
+			video = Video(video=request.FILES['video'])
+			video.save()
+			beacon.video = video
+
+		beacon.save()
+
+		return HttpResponse(status_code=status.HTTP_200_OK)
+
+	else:
+		return HttpResponse(status_code=status.HTTP_200_OK)
+
 
 #API endpoint that gets a Picture stored on the server
 @api_view()
@@ -129,8 +165,4 @@ def text(request, id):
 
 	text_data = Text.objects.get(id=id).text
 	return Response(text_data)
-
-
-
-
 
