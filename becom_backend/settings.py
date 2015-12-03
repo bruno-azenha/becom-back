@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'RESTafari',
+    'becom_web',
     'rest_framework',
     'rest_framework_gis',
     'oauth2_provider',
