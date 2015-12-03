@@ -37,17 +37,30 @@ class BeaconSimpleSerializer(serializers.ModelSerializer):
 		allow_null=True,
 		slug_field='text'
 	)
-	id_picture = serializers.SlugRelatedField(
-		read_only=True,
-		allow_null=True,
-		slug_field='url'
-	)
-	id_video = serializers.SlugRelatedField(
-		read_only=True,
-		allow_null=True,
-		slug_field='url'
-	)
+	# id_picture = serializers.SlugRelatedField(
+	# 	read_only=True,
+	# 	allow_null=True,
+	# 	slug_field='picture'
+	# )
+	picture = serializers.SerializerMethodField('get_picture_url')
+	def get_picture_url(self, beacon):
+		if beacon.id_picture is not None:
+			return beacon.id_picture.picture.url 
+
+	video = serializers.SerializerMethodField('get_video_url')
+	def get_video_url(self, beacon):
+		if beacon.id_video is not None:
+			return beacon.id_video.video.url
+
+	# id_picture = serializers.FileField(
+	# 	use_url=True
+	# )
+	# id_video = serializers.SlugRelatedField(
+	# 	read_only=True,
+	# 	allow_null=True,
+	# 	slug_field='video'
+	# )
 
 	class Meta:
 		model = Beacon
-		fields = ('id', 'user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'id_picture', 'id_video')
+		fields = ('id', 'user', 'position', 'creation_date', 'expiration_date', 'reach', 'id_text', 'picture', 'video')
