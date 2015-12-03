@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from RESTafari.models import *
 from RESTafari.serializers import *
@@ -49,7 +49,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 # API endpoint that returns all beacons that are on reach of a certain
 # coordinate (lat, lng)
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def near_beacons(request):
 
 	# Gets latitude, longitude and distance from http request
@@ -79,7 +79,7 @@ def near_beacons(request):
 # API endpoint that given an Beacon ID, returns the beacon and
 # all information associated with it
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def beacon(request):
 	if request.method == 'GET':
 
@@ -105,7 +105,7 @@ def beacon(request):
 
 #API endpoint that given all of its information, creates a beacon
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def create_beacon(request):
 	if request.method == 'POST':
 		received_json = json.loads(request.body)
@@ -141,7 +141,7 @@ def create_beacon(request):
 
 #API endpoint that gets a Picture stored on the server
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def picture(request, id):
 	print("Requested Picture Id = " + id)
 
@@ -150,7 +150,7 @@ def picture(request, id):
 
 #API endpoint that gets a Video stored on the server
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def video(request, id):
 	print("Requested Video Id = " + id)
 
@@ -159,7 +159,7 @@ def video(request, id):
 
 #API endpoint that gets a Text stored on the server
 @api_view()
-@permission_classes((AllowAny, ))
+@permission_classes((IsAuthenticated, ))
 def text(request, id):
 	print("Requested text Id = " + id)
 
