@@ -6,5 +6,4 @@ urlpatterns = [
     url(r'^api/', include('RESTafari.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 ]
