@@ -145,7 +145,7 @@ def create_beacon(request):
 		beacon = Beacon()
 		beacon.user = request.user
 		beacon.position = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
-		beacon.expiration_date = datetime.datetime.now().replace(tzinfo=pytz.UTC) + datetime.timedelta(1)
+		beacon.expiration_date = datetime.datetime.now().replace(tzinfo=pytz.UTC) + datetime.timedelta(hours=1)
 
 		if 'text' in received_json:
 			text = Text(text=received_json['text'])
@@ -207,13 +207,13 @@ def like_beacon(request):
 	(like, created) = Like.objects.get_or_create(beacon=beacon, user=user)
 
 	if created:
-		beacon.expiration_date += datetime.timedelta(hours=1)
+		beacon.expiration_date += datetime.timedelta(minutes=10)
 		beacon.save()
 		content = {"details": "Succesfull Like"}
 
 	else:
 		like.delete()
-		beacon.expiration_date -= datetime.timedelta(hours=1)
+		beacon.expiration_date -= datetime.timedelta(minutes=10)
 		beacon.save()
 		content = {"details": "Removed Like"}
 
