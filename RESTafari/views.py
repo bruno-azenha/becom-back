@@ -5,7 +5,11 @@ from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
 from django.http import HttpResponse
 from django.http import JsonResponse
 
+
+from django.contrib.auth.models import User
+
 from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
@@ -51,7 +55,6 @@ class CommentViewSet(viewsets.ModelViewSet):
 @api_view()
 @permission_classes((IsAuthenticated, ))
 def near_beacons(request):
-
 	# Gets latitude, longitude and distance from http request
 	lat = request.GET.get('lat')
 	lng = request.GET.get('lng')
@@ -81,6 +84,7 @@ def near_beacons(request):
 @api_view()
 @permission_classes((IsAuthenticated, ))
 def beacon(request):
+
 	if request.method == 'GET':
 
 		# Get id from http request
@@ -104,39 +108,44 @@ def beacon(request):
 
 
 #API endpoint that given all of its information, creates a beacon
-@api_view()
+@api_view(['GET', 'POST'])
 @permission_classes((IsAuthenticated, ))
 def create_beacon(request):
 	if request.method == 'POST':
-		received_json = json.loads(request.body)
+		received_json = json.loads(request.body.decode('utf-8'))
+
+		lat = received_json['lat']
+		lng = received_json['lng']
+
+		if (not request.user.is_authenticated()):
+			HttpResponse("fudeu")
 
 		beacon = Beacon()
-		beacon.user = received_json['user']
-		beacon.position = received_json['position']
-		beacon.expiration_date = received_json['expiration_date']
-		beacon.creation_date = datetime.datetime.now()
+		beacon.user = request.user
+		beacon.position = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
+		beacon.expiration_date = datetime.datetime.now() + datetime.timedelta(1)
 
-		if (received_json[text]):
+		if ('text' in received_json):
 			text = Text(text=received_json['text'])
 			text.save()
-			beacon.text = text
+			beacon.id_text = text
 
-		if (request.FILES['picture']):
+		if 'picture' in request.FILES:
 			picture = Picture(picture=request.FILES['picture'])
 			picture.save()
-			beacon.picture = picture
+			beacon.id_picture = picture
 
-		if (request.FILES['video']):
+		if 'video' in request.FILES:
 			video = Video(video=request.FILES['video'])
 			video.save()
-			beacon.video = video
+			beacon.id_video = video
 
 		beacon.save()
 
-		return HttpResponse(status_code=status.HTTP_200_OK)
+		return HttpResponse(status=status.HTTP_200_OK)
 
 	else:
-		return HttpResponse(status_code=status.HTTP_200_OK)
+		return HttpResponse(status=status.HTTP_200_OK)
 
 
 #API endpoint that gets a Picture stored on the server
