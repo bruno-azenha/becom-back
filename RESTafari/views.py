@@ -1,12 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from django.core.serializers import serialize
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
+from django.contrib.auth.models import User
 
 from django.http import HttpResponse
 from django.http import JsonResponse
-
-
-from django.contrib.auth.models import User
 
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
@@ -17,9 +17,13 @@ from rest_framework.permissions import IsAuthenticated
 from RESTafari.models import *
 from RESTafari.serializers import *
 
+from base64 import b64decode
+from django.core.files.base import ContentFile
+
 import json
 import datetime
 import pytz
+import uuid
 
 # API endpoint that allows users to be viewed or edited.
 class UserViewSet(viewsets.ModelViewSet):
@@ -135,15 +139,16 @@ def create_beacon(request):
 		beacon = Beacon()
 		beacon.user = request.user
 		beacon.position = fromstr('POINT({0} {1})'.format(lat, lng), srid=4326)
-		beacon.expiration_date = datetime.datetime.now() + datetime.timedelta(1)
+		beacon.expiration_date = datetime.datetime.now().replace(tzinfo=pytz.UTC) + datetime.timedelta(1)
 
-		if ('text' in received_json):
+		if 'text' in received_json:
 			text = Text(text=received_json['text'])
 			text.save()
 			beacon.id_text = text
 
-		if 'picture' in request.FILES:
-			picture = Picture(picture=request.FILES['picture'])
+		if 'picture' in received_json:
+			picture_data = b64decode(received_json['picture'])
+			picture = Picture(picture=ContentFile(picture_data, name=str(uuid.uuid1())+'.jpg'))
 			picture.save()
 			beacon.id_picture = picture
 
