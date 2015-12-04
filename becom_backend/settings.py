@@ -54,6 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 )
 
 ROOT_URLCONF = 'becom_backend.urls'
@@ -132,7 +133,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
     ),
 
     # Use Django's standard `django.contrib.auth` permissions,
@@ -155,7 +156,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-PROPRIETARY_BACKEND_NAME = 'Facebook'
 
 # Facebook Cconfiguration
 SOCIAL_AUTH_FACEBOOK_KEY = '500148983494568'

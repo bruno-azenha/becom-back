@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Text(models.Model):
@@ -10,10 +11,11 @@ class Picture(models.Model):
 class Video(models.Model):
 	video = models.FileField(upload_to="user_vid")
 
-class User(models.Model):
-	fb_uid = models.CharField(max_length=16, db_index=True, unique=True) #Facebook User ID
-	fb_pic = models.ForeignKey(Picture, null=True)
-	email = models.EmailField()
+
+#class User(models.Model):
+	#fb_uid = models.CharField(max_length=16, db_index=True, unique=True) #Facebook User ID
+	#fb_pic = models.ForeignKey(Picture, null=True)
+	#email = models.EmailField()
 
 class Beacon(models.Model):
 	user = models.ForeignKey(User)
