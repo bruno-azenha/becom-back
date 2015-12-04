@@ -55,6 +55,12 @@ class CommentViewSet(viewsets.ModelViewSet):
 	queryset = Comment.objects.all()
 	serializer_class = CommentSerializer
 
+# API endpoint that allows likes to be viewed or edited.
+class CommentViewSet(viewsets.ModelViewSet):
+	queryset = Like.objects.all()
+	serializer_class = LikeSerializer
+
+
 # API endpoint that returns all beacons that are on reach of a certain
 # coordinate (lat, lng)
 @api_view()
@@ -192,20 +198,22 @@ def text(request, id):
 	return Response(text_data)
 
 # Like Beacon
+@api_view()
+@permission_classes((IsAuthenticated, ))
 def like_beacon(request):
-	beacon = Beacon.objects.get(request.GET.get['id'])
+	beacon = Beacon.objects.get(pk=request.GET.get('id'))
 	user = request.user
 
 	(like, created) = Like.objects.get_or_create(beacon=beacon, user=user)
 
 	if created:
-		beacon.expiration_date += datetime.timedelta(0,1)
+		beacon.expiration_date += datetime.timedelta(hours=1)
 		beacon.save()
 		content = {"details": "Succesfull Like"}
 
 	else:
 		like.delete()
-		beacon.expiration_date -= datetime.timedelta(0,1)
+		beacon.expiration_date -= datetime.timedelta(hours=1)
 		beacon.save()
 		content = {"details": "Removed Like"}
 

@@ -31,6 +31,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 		model = Comment
 		fields = ('id', 'beacon', 'text')
 
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Like
+		fields = ('id', 'beacon', 'user')
+
 class BeaconSimpleSerializer(serializers.ModelSerializer):
 	id_text = serializers.SlugRelatedField(
 		read_only=True,

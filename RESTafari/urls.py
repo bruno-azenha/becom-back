@@ -9,6 +9,8 @@ router.register(r'texts', views.TextViewSet)
 router.register(r'pictures', views.PictureViewSet)
 router.register(r'videos', views.VideoViewSet)
 router.register(r'comments', views.CommentViewSet)
+router.register(r'likes', views.CommentViewSet)
+
 
 
 # Wire up our API using automatic URL routing.
