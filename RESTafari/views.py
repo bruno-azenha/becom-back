@@ -19,6 +19,7 @@ from RESTafari.serializers import *
 
 import json
 import datetime
+import pytz
 
 # API endpoint that allows users to be viewed or edited.
 class UserViewSet(viewsets.ModelViewSet):
@@ -73,6 +74,8 @@ def near_beacons(request):
 		dist = int(dist)
 		query = Beacon.objects.filter(position__distance_lte=(point, D(m=dist)))
 
+	now = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+	query = [x for x in query if x.expiration_date>now]
 
 	# Serializes query and returns response
 	#response = HttpResponse(BeaconSerializer(query, many=True).data, content_type="application/json")

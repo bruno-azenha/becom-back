@@ -4,7 +4,7 @@ from RESTafari.models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'fb_uid', 'email')
+        fields = ('id', 'username', 'email')
 
 class BeaconSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
