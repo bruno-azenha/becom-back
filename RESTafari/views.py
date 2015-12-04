@@ -217,6 +217,6 @@ def like_beacon(request):
 		beacon.save()
 		content = {"details": "Removed Like"}
 
-	return HttpResponse(content, status=status.HTTP_200_OK)
+	return Response(content)
 
 
