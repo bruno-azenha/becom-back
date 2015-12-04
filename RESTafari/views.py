@@ -205,17 +205,18 @@ def like_beacon(request):
 	user = request.user
 
 	(like, created) = Like.objects.get_or_create(beacon=beacon, user=user)
+	content = None
 
 	if created:
 		beacon.expiration_date += datetime.timedelta(minutes=10)
 		beacon.save()
-		content = {"details": "Succesfull Like"}
+		content = dict([('details', "Succesfull Like")])
 
 	else:
 		like.delete()
 		beacon.expiration_date -= datetime.timedelta(minutes=10)
 		beacon.save()
-		content = {"details": "Removed Like"}
+		content = dict([('details', "Removed Like")])
 
 	return Response(content)
 
