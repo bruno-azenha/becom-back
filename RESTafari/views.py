@@ -81,6 +81,15 @@ def near_beacons(request):
 	#response = HttpResponse(BeaconSerializer(query, many=True).data, content_type="application/json")
 	return Response(BeaconSimpleSerializer(query, many=True).data)
 
+# API endpoint that given an Beacon ID, returns the beacon and
+# all information associated with it
+@api_view()
+@permission_classes((IsAuthenticated, ))
+def my_beacons(request):
+	query = Beacon.objects.filter(user=request.user)
+	return Response(BeaconSimpleSerializer(query, many=True).data)
+
+
 
 # API endpoint that given an Beacon ID, returns the beacon and
 # all information associated with it

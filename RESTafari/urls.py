@@ -17,6 +17,7 @@ urlpatterns = [
 	url(r'^browsable_api/', include(router.urls)),
 
 	url(r'^beacons/$', views.near_beacons),
+	url(r'^beacons/mine$', views.my_beacons),
 	url(r'^beacon/$', views.beacon),
 	url(r'^beacon/create$', views.create_beacon),
 	url(r'^pictures/(\d+)$', views.picture),
