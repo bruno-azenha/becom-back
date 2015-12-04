@@ -148,7 +148,7 @@ def create_beacon(request):
 
 		if 'picture' in received_json:
 			picture_data = b64decode(received_json['picture'])
-			picture = Picture(picture=ContentFile(picture_data, name=str(uuid.uuid1())+'.jpg'))
+			picture = Picture(picture=ContentFile(picture_data, name=str(uuid.uuid4())+'.jpg'))
 			picture.save()
 			beacon.id_picture = picture
 
@@ -163,7 +163,6 @@ def create_beacon(request):
 
 	else:
 		return HttpResponse(status=status.HTTP_200_OK)
-
 
 #API endpoint that gets a Picture stored on the server
 @api_view()
@@ -191,4 +190,25 @@ def text(request, id):
 
 	text_data = Text.objects.get(id=id).text
 	return Response(text_data)
+
+# Like Beacon
+def like_beacon(request):
+	beacon = Beacon.objects.get(request.GET.get['id'])
+	user = request.user
+
+	(like, created) = Like.objects.get_or_create(beacon=beacon, user=user)
+
+	if created:
+		beacon.expiration_date += datetime.timedelta(0,1)
+		beacon.save()
+		content = {"details": "Succesfull Like"}
+
+	else:
+		like.delete()
+		beacon.expiration_date -= datetime.timedelta(0,1)
+		beacon.save()
+		content = {"details": "Removed Like"}
+
+	return HttpResponse(content, status=status.HTTP_200_OK)
+
 

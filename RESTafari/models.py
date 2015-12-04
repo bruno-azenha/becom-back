@@ -32,4 +32,11 @@ class Comment(models.Model):
 	beacon = models.ForeignKey(Beacon)
 	text   = models.ForeignKey(Text)
 
+class Like(models.Model):
+	beacon = models.ForeignKey(Beacon)
+	user = models.ForeignKey(User)
+
+	class Meta:
+		unique_together = (('beacon', 'user'),)
+
     

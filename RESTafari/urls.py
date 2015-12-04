@@ -19,6 +19,7 @@ urlpatterns = [
 	url(r'^beacons/$', views.near_beacons),
 	url(r'^beacons/mine$', views.my_beacons),
 	url(r'^beacon/$', views.beacon),
+	url(r'^beacon/like$', views.like_beacon),
 	url(r'^beacon/create$', views.create_beacon),
 	url(r'^pictures/(\d+)$', views.picture),
 	url(r'^videos/(\d+)$', views.video),
